@@ -3,7 +3,6 @@ import chromedriver_binary
 import time
 import os
 import discord
-from discord.ext.commands import Bot
 import re
 
 TOKEN = os.getenv("FESTBOT_TOKEN")
