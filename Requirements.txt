@@ -1,0 +1,5 @@
+pandas
+selenium
+chromedriver_binary ==  89.0.4389.23
+lxml
+discord
