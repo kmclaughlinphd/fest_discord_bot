@@ -67,7 +67,7 @@ def get_band_names():
     for tag in tags:
         if tag.get_attribute('class') == "PerformerList__PerformerName-bon0a2-6 AzOzc":
             # convert "THE BAND" to "BAND, THE"
-            if tag.text[0:3] == "THE":
+            if tag.text[0:4] == "THE ":
                 band_names.append("%s, THE" % tag.text[4:])
             else:
                 band_names.append(tag.text)
