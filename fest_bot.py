@@ -9,6 +9,7 @@ TOKEN = os.getenv("FESTBOT_TOKEN")
 
 # list of emojis used by the bot. don't mess with this.
 auto_emojis = ['⬆️', '↔️', '⬇️']
+dead_emoji = '💀'
 
 # broke down the artists into subgroups based on first initial
 # this is because discord sucks at long scroll backs
@@ -56,10 +57,15 @@ def get_band_names():
     driver.get('https://thefestfl.com/bands')
     time.sleep(5)
 
+    # for debug -- get the raw xml tree
+    # from lxml import html, etree
+    # htmldoc = html.fromstring(driver.page_source)
+    # etree.tostring(htmldoc)
+
     # yea this is hacky AF, but what're you gonna do
-    tags = driver.find_elements_by_xpath('/html/body/div/div/div/div/main/div/div/div/ul/li/button/span/h6/div/div')
+    tags = driver.find_elements_by_xpath('/html/body/div/div/div/div/main/div/div/div/ul/li/button/span/span/div/div')
     for tag in tags:
-        if tag.get_attribute('class') == "PerformerList__PerformerName-ajyuvd-6 gVuEhx":
+        if tag.get_attribute('class') == "PerformerList__PerformerName-bon0a2-6 AzOzc":
             # convert "THE BAND" to "BAND, THE"
             if tag.text[0:3] == "THE":
                 band_names.append("%s, THE" % tag.text[4:])
@@ -90,8 +96,9 @@ async def update_channels(client, list_artists_from_web):
             # remove artists that aren't on the current roster
             existing_artist = msg.content
             if existing_artist not in rostered_artists:
-                await msg.delete()
-                removed_ct += 1
+                if dead_emoji not in [reacts.emoji for reacts in msg.reactions]:
+                    await msg.add_reaction(dead_emoji)
+                    removed_ct += 1
             else:
                 existing_artists.append(msg.content)
 
